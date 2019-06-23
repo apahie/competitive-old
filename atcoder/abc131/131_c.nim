@@ -1,13 +1,19 @@
 import sequtils, strutils, math
 
+proc count_in[int](a,b: int): auto =
+  (proc(n: int): int =
+    let
+      n_not_in = (a-1) div n
+      n_all = b div n
+    return n_all - n_not_in
+  )
+
 let
   inputs = stdin.readLine.split.map parseInt
   (a, b, c, d) = (inputs[0], inputs[1], inputs[2], inputs[3])
-  (c_not_in, c_all) = ((a-1) div c, b div c)
-  c_in = c_all - c_not_in
-  (d_not_in, d_all) = ((a-1) div d, b div d)
-  d_in = d_all - d_not_in
+  n_in = count_in(a, b)
+  c_in = n_in(c)
+  d_in = n_in(d)
   cd = lcm(c, d)
-  (cd_not_in, cd_all) = ((a-1) div cd, b div cd)
-  cd_in = cd_all - cd_not_in
-echo b-(a-1) - (c_in+d_in-cd)
+  cd_in = n_in(cd)
+echo b-(a-1) - (c_in+d_in-cd_in)
